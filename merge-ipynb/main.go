@@ -8,7 +8,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/nishanths/merge-ipynb"
+	"github.com/crime-data/merge-ipynb"
 )
 
 const (
