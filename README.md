@@ -1,14 +1,14 @@
 # merge-ipynb
 
-> Merge iPython notebook cells with ease
+Merge iPython notebook cells with ease
 
-# Package
+## Package
 
-Package `merge-ipynb` provides a Merge function that merges iPython notebooks and writes the result to the specified `io.Writer`.
+Package `merge-ipynb` provides a Merge function that merges iPython notebook cells and writes the result to the specified `io.Writer`.
 
 Import the package as `merge-ipynb` and refer to it as `merge`.
 
-## Web interface
+## Online
 
 See [`merge-ipynb-web`]().
 

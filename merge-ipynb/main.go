@@ -1,14 +1,13 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"sync"
 
-	"github.com/crime-data/merge-ipynb"
+	"github.com/crime-analysis/merge-ipynb"
 )
 
 const (
@@ -17,7 +16,6 @@ usage: merge-ipynb <p1.ipynb> <p2.ipynb>...`
 )
 
 func main() {
-	flag.Parse()
 	args := os.Args[1:]
 
 	// Print help and exit

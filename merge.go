@@ -1,3 +1,5 @@
+// Package merge provides a Merge function that merges iPython notebook cells
+
 package merge
 
 import (
@@ -8,6 +10,8 @@ import (
 	"sync"
 )
 
+// Merge merges the iPython notebooks by reading them from the provided Readers
+// and writes the merged output JSON to the specified Writer
 func Merge(w io.Writer, r ...io.Reader) error {
 	if len(r) == 0 {
 		return errors.New("no input readers provided")
