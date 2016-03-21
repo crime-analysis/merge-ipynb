@@ -8,14 +8,14 @@ import (
 	"sync"
 )
 
-func Merge(w io.Writer, r ...io.Reader) (int, error) {
+func Merge(w io.Writer, r ...io.Reader) error {
 	if len(r) == 0 {
-		return 0, errors.New("no input readers provided")
+		return errors.New("no input readers provided")
 	}
 
 	if len(r) == 1 {
-		i, err := io.Copy(w, r[0])
-		return int(i), err
+		_, err := io.Copy(w, r[0])
+		return err
 	}
 
 	notebooks := make([]map[string]interface{}, len(r))
@@ -39,11 +39,23 @@ func Merge(w io.Writer, r ...io.Reader) (int, error) {
 
 	for err := range ch {
 		if err != nil {
-			return 0, err
+			return err
 		}
 	}
 
-	// the first notebook is used as the base
-	fmt.Printf("%+v", notebooks[0])
-	return 0, nil
+	baseCells, ok := notebooks[0]["cells"].([]interface{})
+	if !ok {
+		return errors.New("first notebook does not have expected format")
+	}
+
+	for i := 1; i < len(notebooks); i += 1 {
+		cells, ok := notebooks[i]["cells"].([]interface{})
+		if !ok {
+			return fmt.Errorf("notebook #%d does not have expected format", i+1)
+		}
+		baseCells = append(baseCells, cells...)
+	}
+
+	notebooks[0]["cells"] = baseCells
+	return json.NewEncoder(w).Encode(notebooks[0])
 }

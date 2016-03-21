@@ -1,11 +1,12 @@
 package main
 
 import (
-	"bytes"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
+	"sync"
 
 	"github.com/nishanths/merge-ipynb"
 )
@@ -25,15 +26,33 @@ func main() {
 		os.Exit(0)
 	}
 
-	f1, err := os.Open(args[0])
-	if err != nil {
-		log.Fatal(err)
+	// Open files concurrently
+	filenames := args[0:]
+	files := make([]io.Reader, len(filenames))
+	wg := sync.WaitGroup{}
+	wg.Add(len(filenames))
+	ch := make(chan error, len(filenames))
+
+	for i, f := range filenames {
+		i := i
+		f := f
+
+		go func() {
+			defer wg.Done()
+			file, err := os.Open(f)
+			ch <- err
+			files[i] = file
+		}()
 	}
 
-	f2, err := os.Open(args[1])
-	if err != nil {
-		log.Fatal(err)
+	wg.Wait()
+	close(ch)
+
+	for err := range ch {
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
-	merge.Merge(bytes.NewBuffer(nil), f1, f2)
+	merge.Merge(os.Stdout, files...)
 }
