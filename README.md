@@ -10,7 +10,7 @@ Import the package as `merge-ipynb` and refer to it as `merge`.
 
 ## Online
 
-See [`merge-ipynb-web`]().
+See [`merge-ipynb-web`](http://merge-ipynb.appspot.com).
 
 ## Command-line
 

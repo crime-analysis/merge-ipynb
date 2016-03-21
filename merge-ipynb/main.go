@@ -52,5 +52,8 @@ func main() {
 		}
 	}
 
-	merge.Merge(os.Stdout, files...)
+	err := merge.Merge(os.Stdout, files...)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
